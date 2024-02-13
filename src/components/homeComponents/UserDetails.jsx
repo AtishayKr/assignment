@@ -1,62 +1,23 @@
 import {StyleSheet, View, Alert} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useState} from 'react';
-import Input from '../common/Input';
-import CustomBtn from '../common/CustomBtn';
+import {Formik} from 'formik';
+import {CustomBtn, Error, Input} from '../common';
+import {UserDetailsSchema} from '../../schema';
 
 const UserDetails = () => {
   const [count, setCount] = useState(0);
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
-  const [password, setPassword] = useState('');
-  const [cnfPassword, setcnfPassword] = useState('');
 
-  const handlePress = async () => {
-    if (
-      firstName.length === 0 ||
-      lastName.length === 0 ||
-      email.length === 0 ||
-      password.length === 0 ||
-      cnfPassword.length === 0
-    ) {
-      Alert.alert('Please Enter all required fields');
-    } else if (password !== cnfPassword) {
-      Alert.alert("Password an CnfPassword doesn't matched");
+  const handleFoamSubmission = async userData => {
+    // console.log(userData);
+    const data = await AsyncStorage.getItem(userData.email);
+    console.log('data is ->' + data);
+    if (data !== null) {
+      Alert.alert('User already exist');
     } else {
-      const obj = {
-        firstName,
-        lastName,
-        email,
-        address,
-        password,
-        cnfPassword
-      };
-
-      let data = '';
-      try {
-        data = JSON.parse(await AsyncStorage.getItem(email));
-      } catch (error) {
-        console.log(error);
-      }
-
-      if (data.length !== 0) {
-        Alert.alert('User already exist');
-      } else {
-        try {
-          await AsyncStorage.setItem(email, JSON.stringify(obj));
-        } catch (error) {
-          console.log(error);
-        }
-        Alert.alert('User is registered successfully');
-        setFirstName('');
-        setLastName('');
-        setEmail('');
-        setPassword('');
-        setcnfPassword('');
-        setAddress('');
-      }
+      await AsyncStorage.setItem(userData.email, JSON.stringify(userData));
+      Alert.alert('User is registered successfully');
     }
   };
 
@@ -81,62 +42,94 @@ const UserDetails = () => {
     </View>
   );
 
+  const initialState = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    address: '',
+    password: '',
+    cnfPassword: ''
+  };
+
   return (
-    <View style={styles.mainContainer}>
-      <View style={styles.name}>
-        <Input
-          customStyle={styles.firstName}
-          placeholder="First Name"
-          value={firstName}
-          onChangeText={text => setFirstName(text)}
-        />
-        <Input
-          customStyle={styles.lastName}
-          placeholder="Last Name"
-          value={lastName}
-          onChangeText={text => setLastName(text)}
-        />
-      </View>
+    <Formik
+      initialValues={initialState}
+      validateOnMount={true}
+      validationSchema={UserDetailsSchema}
+      onSubmit={handleFoamSubmission}>
+      {({handleChange, handleBlur, handleSubmit, values, errors, touched, isValid}) => (
+        <View style={styles.mainContainer}>
+          <View style={styles.name}>
+            <Input
+              customStyle={styles.firstName}
+              placeholder="First Name"
+              onChangeText={handleChange('firstName')}
+              onBlur={handleBlur('firstName')}
+              value={values.firstName}
+            />
+            <Input
+              customStyle={styles.lastName}
+              placeholder="Last Name"
+              onChangeText={handleChange('lastName')}
+              onBlur={handleBlur('lastName')}
+              value={values.lastName}
+            />
+          </View>
 
-      <Input placeholder="Email Address" value={email} onChangeText={text => setEmail(text)} />
+          {errors.firstName && touched.firstName && <Error message={errors.firstName} />}
 
-      <View style={styles.addressCnt}>
-        <Input
-          customStyle={styles.address}
-          placeholder="Enter Your Address"
-          value={address}
-          onChangeText={text => setAddress(text)}
-        />
-        <CustomBtn
-          onPress={() => {
-            setCount(count + 1);
-          }}
-          title={'+'}
-          color={'white'}
-          customStyle={styles.addBtn}
-        />
-      </View>
-      {Array(count).fill(addressLine)}
-      <Input
-        placeholder="Enter Your Password"
-        secureTextEntry={true}
-        value={password}
-        onChangeText={text => setPassword(text)}
-      />
-      <Input
-        placeholder="Confirm Your Password"
-        secureTextEntry={true}
-        value={cnfPassword}
-        onChangeText={text => setcnfPassword(text)}
-      />
+          <Input
+            placeholder="Email Address"
+            onChangeText={handleChange('email')}
+            onBlur={handleBlur('email')}
+            value={values.email}
+          />
+          {errors.email && touched.email && <Error message={errors.email} />}
 
-      <CustomBtn
-        onPress={handlePress}
-        title={'SUBMIT'}
-        color={'white'}
-        customStyle={styles.submitBtn}
-      />
-    </View>
+          <View style={styles.addressCnt}>
+            <Input
+              customStyle={styles.address}
+              placeholder="Enter Your Address"
+              onChangeText={handleChange('address')}
+              onBlur={handleBlur('address')}
+              value={values.address}
+            />
+            <CustomBtn
+              onPress={() => {
+                setCount(count + 1);
+              }}
+              title={'+'}
+              color={'white'}
+              customStyle={styles.addBtn}
+            />
+          </View>
+          {Array(count).fill(addressLine)}
+          <Input
+            placeholder="Enter Your Password"
+            secureTextEntry={true}
+            onChangeText={handleChange('password')}
+            onBlur={handleBlur('password')}
+            value={values.password}
+          />
+          {errors.password && touched.password && <Error message={errors.password} />}
+          <Input
+            placeholder="Confirm Your Password"
+            secureTextEntry={true}
+            onChangeText={handleChange('cnfPassword')}
+            onBlur={handleBlur('cnfPassword')}
+            value={values.cnfPassword}
+          />
+          {errors.cnfPassword && touched.cnfPassword && <Error message={errors.cnfPassword} />}
+
+          <CustomBtn
+            onPress={handleSubmit}
+            title={'SUBMIT'}
+            color={'white'}
+            customStyle={styles.submitBtn}
+          />
+        </View>
+      )}
+    </Formik>
   );
 };
 

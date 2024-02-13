@@ -1,12 +1,12 @@
-import {SafeAreaView} from 'react-native';
 import React from 'react';
-import HomeScreen from './src/screens/HomeScreen';
+import {NavigationContainer} from '@react-navigation/native';
+import {StackNavigation} from './src/navigation';
 
 const App = () => {
   return (
-    <SafeAreaView>
-      <HomeScreen />
-    </SafeAreaView>
+    <NavigationContainer>
+      <StackNavigation />
+    </NavigationContainer>
   );
 };
 
