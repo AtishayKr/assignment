@@ -1,13 +1,15 @@
-import {KeyboardAvoidingView, ScrollView, StyleSheet, Text, View} from 'react-native';
+import { KeyboardAvoidingView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import {ProfilePic, UserDetails} from '../components/homeComponents';
-import {useNavigation} from '@react-navigation/native';
+import { ProfilePic, UserDetails } from '../components/homeComponents';
+import { useNavigation } from '@react-navigation/native';
+import { Header } from '../components/common';
 
 export default function SignUpScreen() {
   const navigation = useNavigation();
 
   return (
     <KeyboardAvoidingView>
+      <Header title={"SIGNUP"} leftIcon={true} />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.mainContainer}>
           <ProfilePic />

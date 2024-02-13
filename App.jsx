@@ -1,12 +1,12 @@
 import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {StackNavigation} from './src/navigation';
+import { AppNavigation } from './src/navigation';
+import UserContextProvider from './src/context/UserContextProvider';
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <StackNavigation />
-    </NavigationContainer>
+    <UserContextProvider>
+      <AppNavigation />
+    </UserContextProvider>
   );
 };
 

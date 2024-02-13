@@ -1,28 +1,32 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import { CustomBtn } from '../components/common';
+import { CustomBtn, Header } from '../components/common';
 
 const WelcomeScreen = ({ navigation }) => {
   return (
-    <View style={styles.mainContainer}>
-      <View style={styles.WelcomeMsg}>
-        <Text style={styles.text}>WELCOME TO KRENAI</Text>
+    <>
+      <Header title={"Welcome"} />
+      <View style={styles.mainContainer}>
+
+        <View style={styles.WelcomeMsg}>
+          <Text style={styles.text}>WELCOME TO KRENAI</Text>
+        </View>
+        <View style={styles.BtnCont}>
+          <CustomBtn
+            title={'LOGIN'}
+            customStyle={styles.BtnCustomSty}
+            color={'white'}
+            onPress={() => navigation.push('LogIn')}
+          />
+          <CustomBtn
+            title={'SIGNUP'}
+            customStyle={styles.BtnCustomSty}
+            color={'white'}
+            onPress={() => navigation.push('SignUp')}
+          />
+        </View>
       </View>
-      <View style={styles.BtnCont}>
-        <CustomBtn
-          title={'LOGIN'}
-          customStyle={styles.BtnCustomSty}
-          color={'white'}
-          onPress={() => navigation.push('LogIn')}
-        />
-        <CustomBtn
-          title={'SIGNUP'}
-          customStyle={styles.BtnCustomSty}
-          color={'white'}
-          onPress={() => navigation.push('SignUp')}
-        />
-      </View>
-    </View>
+    </>
   );
 };
 
