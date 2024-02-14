@@ -9,29 +9,32 @@ import { useSelector } from 'react-redux'
 const MyCart = () => {
     // const { cart } = useContext(Usercontext);
     const cart = useSelector((value) => value.cart)
+    const [newData, setNewData] = useState([]);
 
     let newRenderData;
 
     useEffect(() => {
-        newRenderData = dummyData.filter(item => cart.includes(item.id));
-        console.log("newrender data")
-        console.log(newRenderData)
+        newRenderData = dummyData.filter(item => cart.includes(item.id))
+        // console.log(newRenderData)
+        setNewData(newRenderData);
     }, [cart])
+
     return (
         <>
             <Header title={"MYCART"} leftIcon={true} rightIcon={true} />
             <View style={styles.mainContainer}>
                 <View style={styles.verticalSection}>
                     <FlatList
-                        data={newRenderData}
+                        data={newData}
                         showsVerticalScrollIndicator={false}
                         showsHorizontalScrollIndicator={false}
                         renderItem={({ item }) => (
-                            // <Card
-                            //     uri={item.download_url}
-                            //     id={item.id}
-                            // />
-                            <Text>"atishay"</Text>
+                            <Card
+                                uri={item.download_url}
+                                id={item.id}
+                                isChecked={true}
+                            />
+                            // <Text>"atishay"</Text>
                         )}
                         keyExtractor={item => item.id}
                     />

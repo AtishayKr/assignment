@@ -5,8 +5,8 @@ import Icons from 'react-native-vector-icons/Entypo'
 import { useDispatch } from 'react-redux';
 import { addItem, removeItem } from '../../store/myCartAction';
 
-const Card = ({ uri, customStyle, id, filled }) => {
-    const [checked, setChecked] = useState(false);
+const Card = ({ uri, customStyle, id, isChecked }) => {
+    const [checked, setChecked] = useState(isChecked ? isChecked : false);
 
     // const { cart, setCart } = useContext(Usercontext);
     const dispatch = useDispatch();
