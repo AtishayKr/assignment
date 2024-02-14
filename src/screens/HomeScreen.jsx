@@ -28,7 +28,7 @@ const HomeScreen = () => {
   }
   return (
     <>
-      <Header title={"HOME"} />
+      <Header title={"HOME"} rightIcon={true} />
       <View style={styles.mainContainer}>
         <View style={styles.verticalSection}>
           <FlatList
@@ -37,8 +37,9 @@ const HomeScreen = () => {
             showsHorizontalScrollIndicator={false}
             renderItem={({ item }) => (
               <Card
-                customStyle={styles.verticalSectionCard}
+                // customStyle={styles.verticalSectionCard}
                 uri={item.download_url}
+                id={item.id}
               />
             )}
             keyExtractor={item => item.id}

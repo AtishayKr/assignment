@@ -1,15 +1,14 @@
 import { useNavigation } from '@react-navigation/native'
-import React from 'react'
+import React, { useContext } from 'react'
 import { Image, StyleSheet, Text, TouchableHighlight, View } from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import Icons from 'react-native-vector-icons/Entypo'
+import { Usercontext } from '../../context/UserContextProvider'
 
 const Header = ({ title, leftIcon, rightIcon, leftIconPress, rightIconPress }) => {
 
-    const pressHandle = () => {
-        console.log("pressed")
-    }
-
+    const { cart } = useContext(Usercontext);
     const navigation = useNavigation();
+
     return (
         <View style={styles.mainContainer}>
             {leftIcon ? <TouchableHighlight onPress={() => navigation.goBack()}><Image style={styles.leftIcon} source={require('../../assets/BackIcon.png')} /></TouchableHighlight> : <Text>{" "}</Text>}
@@ -17,7 +16,12 @@ const Header = ({ title, leftIcon, rightIcon, leftIconPress, rightIconPress }) =
                 <Text style={styles.title}>{title}</Text>
             </View>
             <View style={styles.rightContainer} >
-                {rightIcon ? rightIcon : <Text>{" "} </Text>}
+                {rightIcon ? <>
+                    <View style={styles.textCont}>
+                        <Text style={styles.text}>{cart.length}</Text>
+                    </View>
+                    <Icons onPress={() => navigation.push("MyCart")} name="heart-outlined" size={40} /></>
+                    : <Text>{" "}</Text>}
             </View>
         </View >
     )
@@ -40,8 +44,24 @@ const styles = StyleSheet.create({
         width: 35
     },
     title: {
-        fontSize: 20,
+        fontSize: 25,
         fontWeight: 'bold'
     },
+    textCont: {
+        position: 'absolute',
+        zIndex: 100,
+        marginTop: 20,
+        marginLeft: 6,
+        height: 28,
+        width: 28,
+        borderRadius: 14,
+        backgroundColor: 'black',
+    },
+    text: {
+        color: 'white',
+        fontSize: 20,
+        borderRadius: 50,
+        alignSelf: 'center',
+    }
 
 })

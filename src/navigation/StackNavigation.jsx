@@ -1,5 +1,5 @@
 import { createStackNavigator } from '@react-navigation/stack';
-import { HomeScreen, WelcomeScreen, SignUpScreen, LogInScreen } from '../screens';
+import { HomeScreen, WelcomeScreen, SignUpScreen, LogInScreen, MyCart } from '../screens';
 import { useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Usercontext } from '../context/UserContextProvider';
@@ -21,7 +21,9 @@ const StackNavigation = () => {
 
   return (
     <Stack.Navigator>
-      {userData ? <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} /> :
+      {userData ? <><Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="MyCart" component={MyCart} options={{ headerShown: false }} /></>
+        :
         <>
           <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
           <Stack.Screen name="SignUp" component={SignUpScreen} options={{ headerShown: false }} />

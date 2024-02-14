@@ -1,28 +1,48 @@
-import React from 'react';
-import { View, Image, StyleSheet } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { View, Image, StyleSheet, ImageBackground, Text } from 'react-native';
+import Icons from 'react-native-vector-icons/Entypo'
+import { Usercontext } from '../../context/UserContextProvider';
 
-const Card = ({ uri, customStyle }) => {
-    // console.log(uri);
-    //   const imgUri = 'https://picsum.photos/id/0/5000/3333';
+const Card = ({ uri, customStyle, id, filled }) => {
+    const [checked, setChecked] = useState(false);
+
+    const { cart, setCart } = useContext(Usercontext);
+    const onPressHandle = (id) => {
+        setChecked((checked) => !checked);
+    }
+
+    useEffect(() => {
+        if (checked === true) {
+            setCart((value) => [...value, id]);
+        } else {
+            setCart((value) => value.filter((item => item != id)))
+        }
+    }, [checked])
+
     return (
-        <View style={styles.container}>
-            <Image source={{ uri: uri }} style={[styles.image, customStyle]} />
-        </View>
+        <>
+            <View style={styles.container}>
+                <Image source={{ uri: uri }} style={[styles.image, customStyle]} />
+                <Icons onPress={onPressHandle} style={styles.icon} name={checked ? "heart" : "heart-outlined"} size={40} color={"red"} />
+            </View>
+        </>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        // marginTop: 25,
         marginBottom: 20,
-        marginHorizontal: 10
+        marginHorizontal: 10,
     },
     image: {
-        backgroundColor: 'gray',
         width: 350,
         height: 200,
-        borderRadius: 20,
+        borderRadius: 15,
     },
+    icon: {
+        position: 'absolute',
+
+    }
 });
 
 export default Card;
