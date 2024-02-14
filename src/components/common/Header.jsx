@@ -3,10 +3,12 @@ import React, { useContext } from 'react'
 import { Image, StyleSheet, Text, TouchableHighlight, View } from 'react-native'
 import Icons from 'react-native-vector-icons/Entypo'
 import { Usercontext } from '../../context/UserContextProvider'
+import { useSelector } from 'react-redux'
 
 const Header = ({ title, leftIcon, rightIcon, leftIconPress, rightIconPress }) => {
 
-    const { cart } = useContext(Usercontext);
+    // const { cart } = useContext(Usercontext);
+    const cart = useSelector((value) => value.cart);
     const navigation = useNavigation();
 
     return (

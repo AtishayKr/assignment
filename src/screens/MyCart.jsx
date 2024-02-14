@@ -4,16 +4,18 @@ import { dummyData } from '../data/dummyData'
 import { Usercontext } from '../context/UserContextProvider'
 import { FlatList } from 'react-native-gesture-handler'
 import { Card, Header } from '../components/common'
+import { useSelector } from 'react-redux'
 
 const MyCart = () => {
-    const { cart } = useContext(Usercontext);
+    // const { cart } = useContext(Usercontext);
+    const cart = useSelector((value) => value.cart)
 
     let newRenderData;
 
     useEffect(() => {
-        newRenderData = dummyData.filter(item => { cart.includes(item.id) });
-        console.log("newRenderData => " + newRenderData)
-        console.log("cart data => " + cart)
+        newRenderData = dummyData.filter(item => cart.includes(item.id));
+        console.log("newrender data")
+        console.log(newRenderData)
     }, [cart])
     return (
         <>
@@ -25,10 +27,11 @@ const MyCart = () => {
                         showsVerticalScrollIndicator={false}
                         showsHorizontalScrollIndicator={false}
                         renderItem={({ item }) => (
-                            <Card
-                                uri={item.download_url}
-                                id={item.id}
-                            />
+                            // <Card
+                            //     uri={item.download_url}
+                            //     id={item.id}
+                            // />
+                            <Text>"atishay"</Text>
                         )}
                         keyExtractor={item => item.id}
                     />
