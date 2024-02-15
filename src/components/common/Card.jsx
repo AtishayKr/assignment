@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { View, Image, StyleSheet, ImageBackground, Text } from 'react-native';
 import Icons from 'react-native-vector-icons/Entypo'
 // import { Usercontext } from '../../context/UserContextProvider';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addItem, removeItem } from '../../store/myCartAction';
 
 const Card = ({ uri, customStyle, id, isChecked }) => {
@@ -10,14 +10,16 @@ const Card = ({ uri, customStyle, id, isChecked }) => {
 
     // const { cart, setCart } = useContext(Usercontext);
     const dispatch = useDispatch();
+    const cart = useSelector(value => value.cart);
     const onPressHandle = (id) => {
         setChecked((checked) => !checked);
     }
 
     useEffect(() => {
+
         if (checked === true) {
             // setCart((value) => [...value, id]);
-            dispatch(addItem({ id }));
+            { !cart.includes(id) && dispatch(addItem({ id })) }
         } else {
             // setCart((value) => value.filter((item => item != id)))
             dispatch(removeItem({ id }));
