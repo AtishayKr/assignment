@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux'
 
 const MyCart = () => {
     // const { cart } = useContext(Usercontext);
-    const cart = useSelector((value) => value.cart)
+    const cart = useSelector((state) => state.cart.value)
     const [newData, setNewData] = useState([]);
 
     let newRenderData;
@@ -28,13 +28,13 @@ const MyCart = () => {
                         data={newData}
                         showsVerticalScrollIndicator={false}
                         showsHorizontalScrollIndicator={false}
+                        ListEmptyComponent={<Text style={styles.empty}>Cart is empty nothing to show</Text>}
                         renderItem={({ item }) => (
                             <Card
                                 uri={item.download_url}
                                 id={item.id}
                                 isChecked={true}
                             />
-                            // <Text>"atishay"</Text>
                         )}
                         keyExtractor={item => item.id}
                     />
@@ -63,5 +63,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 700
 
+    },
+    empty: {
+        fontSize: 20,
+        fontWeight: '400'
     }
 })
