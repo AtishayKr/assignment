@@ -1,15 +1,27 @@
-import { Alert, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, StyleSheet, Text, View } from 'react-native';
 import React, { useContext, useEffect } from 'react';
 import { Card, CustomBtn, Header } from '../components/common';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Usercontext } from '../context/UserContextProvider';
 import { FlatList } from 'react-native-gesture-handler';
-import { dummyData } from '../data/dummyData';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCardData } from '../store/cardData';
+import { useIsFocused } from '@react-navigation/native';
+// import { dummyData } from '../data/dummyData';
 
 
 const HomeScreen = () => {
-
+  console.log("rerender.................................................................")
   const { user, setUser } = useContext(Usercontext);
+  const dispatch = useDispatch();
+  const { data, loading, error } = useSelector((state) => state.cardData);
+
+  const isFocused = useIsFocused();
+  const cart = useSelector((state) => state.cart.value)
+
+  useEffect(() => {
+    dispatch(fetchCardData());
+  }, [dispatch])
 
   const getData = async () => {
     const data = JSON.parse(await AsyncStorage.getItem("loggedInUser"))
@@ -31,19 +43,23 @@ const HomeScreen = () => {
       <Header title={"HOME"} rightIcon={true} />
       <View style={styles.mainContainer}>
         <View style={styles.verticalSection}>
-          <FlatList
-            data={dummyData}
+
+          {loading ? <ActivityIndicator size={'large'} /> : <FlatList
+            data={data}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
-            renderItem={({ item }) => (
-              <Card
+            ListEmptyComponent={<Text>Nothing to Show</Text>}
+            renderItem={({ item }) => {
+              return <Card
                 // customStyle={styles.verticalSectionCard}
                 uri={item.download_url}
                 id={item.id}
+                isChecked={cart.includes(item.id)}
               />
-            )}
+            }}
             keyExtractor={item => item.id}
-          />
+          />}
+
         </View>
         <CustomBtn onPress={logOut} customStyle={styles.btn} title={"LOGOUT"} color={'white'} />
       </View>

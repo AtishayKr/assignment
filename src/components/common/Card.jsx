@@ -3,26 +3,28 @@ import { View, Image, StyleSheet, ImageBackground, Text } from 'react-native';
 import Icons from 'react-native-vector-icons/Entypo'
 // import { Usercontext } from '../../context/UserContextProvider';
 import { useDispatch, useSelector } from 'react-redux';
-import { addItem, removeItem } from '../../store/myCartAction';
+// import { addItem, removeItem } from '../../store/myCartAction';
+import { add, remove } from '../../store/myCartSlice';
 
 const Card = ({ uri, customStyle, id, isChecked }) => {
-    const [checked, setChecked] = useState(isChecked ? isChecked : false);
+    const [checked, setChecked] = useState(isChecked);
 
     // const { cart, setCart } = useContext(Usercontext);
     const dispatch = useDispatch();
-    const cart = useSelector(value => value.cart);
+    const cart = useSelector((state) => state.cart.value);
     const onPressHandle = (id) => {
         setChecked((checked) => !checked);
     }
+    useEffect(() => {
+        setChecked(isChecked)
+    }, [isChecked])
 
     useEffect(() => {
 
         if (checked === true) {
-            // setCart((value) => [...value, id]);
-            { !cart.includes(id) && dispatch(addItem({ id })) }
+            { !cart.includes(id) && dispatch(add(id)) }
         } else {
-            // setCart((value) => value.filter((item => item != id)))
-            dispatch(removeItem({ id }));
+            dispatch(remove(id));
         }
     }, [checked])
 
