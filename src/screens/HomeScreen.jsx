@@ -6,14 +6,18 @@ import { Usercontext } from '../context/UserContextProvider';
 import { FlatList } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCardData } from '../store/cardData';
+import { useIsFocused } from '@react-navigation/native';
 // import { dummyData } from '../data/dummyData';
 
 
 const HomeScreen = () => {
-
+  console.log("rerender.................................................................")
   const { user, setUser } = useContext(Usercontext);
   const dispatch = useDispatch();
   const { data, loading, error } = useSelector((state) => state.cardData);
+
+  const isFocused = useIsFocused();
+  const cart = useSelector((state) => state.cart.value)
 
   useEffect(() => {
     dispatch(fetchCardData());
@@ -45,13 +49,14 @@ const HomeScreen = () => {
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             ListEmptyComponent={<Text>Nothing to Show</Text>}
-            renderItem={({ item }) => (
-              <Card
+            renderItem={({ item }) => {
+              return <Card
                 // customStyle={styles.verticalSectionCard}
                 uri={item.download_url}
                 id={item.id}
+                isChecked={cart.includes(item.id)}
               />
-            )}
+            }}
             keyExtractor={item => item.id}
           />}
 

@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { add, remove } from '../../store/myCartSlice';
 
 const Card = ({ uri, customStyle, id, isChecked }) => {
-    const [checked, setChecked] = useState(isChecked ? isChecked : false);
+    const [checked, setChecked] = useState(isChecked);
 
     // const { cart, setCart } = useContext(Usercontext);
     const dispatch = useDispatch();
@@ -15,6 +15,9 @@ const Card = ({ uri, customStyle, id, isChecked }) => {
     const onPressHandle = (id) => {
         setChecked((checked) => !checked);
     }
+    useEffect(() => {
+        setChecked(isChecked)
+    }, [isChecked])
 
     useEffect(() => {
 
